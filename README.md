@@ -234,5 +234,3 @@ npm test
 
 MIT License
 # recruitment_ai
-# recruitment_ai
-# recruitment_ai
