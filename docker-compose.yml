@@ -1,64 +1,15 @@
 version: '3.8'
 
 services:
-  # Backend FastAPI Service
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    ports:
-      - "8000:8000"
-    environment:
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - LANGFUSE_SECRET_KEY=${LANGFUSE_SECRET_KEY}
-      - LANGFUSE_PUBLIC_KEY=${LANGFUSE_PUBLIC_KEY}
-      - LANGFUSE_HOST=${LANGFUSE_HOST:-https://cloud.langfuse.com}
-      - QDRANT_HOST=qdrant
-      - QDRANT_PORT=6333
-      - DATABASE_URL=sqlite:///./data/recruitment.db
-      - JWT_SECRET=${JWT_SECRET:-your-super-secret-jwt-key-change-in-production}
-    volumes:
-      - ./backend:/app
-      - backend_data:/app/data
-    depends_on:
-      - qdrant
-    networks:
-      - recruitment-network
-    restart: unless-stopped
-
-  # Frontend Next.js Service
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:8000
-      - NEXT_PUBLIC_THESYS_API_KEY=${THESYS_API_KEY}
-    depends_on:
-      - backend
-    networks:
-      - recruitment-network
-    restart: unless-stopped
-
   # Qdrant Vector Database
   qdrant:
     image: qdrant/qdrant:latest
     ports:
-      - "6333:6333"
-      - "6334:6334"
+      - "6333:6333" # HTTP API
+      - "6334:6334" # gRPC API
     volumes:
       - qdrant_data:/qdrant/storage
-    networks:
-      - recruitment-network
     restart: unless-stopped
 
 volumes:
-  backend_data:
   qdrant_data:
-
-
-networks:
-  recruitment-network:
-    driver: bridge

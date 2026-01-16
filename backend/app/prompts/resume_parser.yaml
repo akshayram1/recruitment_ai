@@ -8,7 +8,7 @@ default:
     - phone: Phone number
     - skills: List of technical and soft skills
     - experience: List of work experiences with title, company, duration, and description
-    - education: List of educational qualifications with degree, institution, and year
+    - education: List of educational qualifications with degree (required), institution (use null if missing), and year (use null if missing)
     - summary: A brief professional summary (create one if not present)
     
     Return the data as a valid JSON object. Be thorough and extract all relevant information.
@@ -46,9 +46,11 @@ v2:
        - description: Key responsibilities and achievements
     
     4. **Education** (Array of objects)
-       - degree: Degree name (e.g., "Bachelor of Science in Computer Science")
-       - institution: University or school name
-       - year: Graduation year or period
+       - degree: Degree name (e.g., "Bachelor of Science in Computer Science") - REQUIRED
+       - institution: University or school name - Use null if not found
+       - year: Graduation year or period - Use null if not found
+       
+       IMPORTANT: Only include education entries that have a degree. If institution is missing, use null (not empty string).
     
     5. **Summary**
        - A professional summary (extract if present, generate if not)

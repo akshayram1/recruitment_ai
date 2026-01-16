@@ -16,7 +16,7 @@ class Experience(BaseModel):
 class Education(BaseModel):
     """Education model"""
     degree: str
-    institution: str
+    institution: Optional[str] = None
     year: Optional[str] = None
 
 

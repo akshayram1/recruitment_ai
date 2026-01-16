@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Upload, Plus, Trash2, Briefcase, Loader2 } from "lucide-react";
+import { ArrowLeft, Upload, Plus, Trash2, Briefcase, MapPin, DollarSign, Calendar, Code } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/lib/auth";
 import { api } from "@/lib/api";
@@ -77,28 +77,37 @@ export default function RecruiterJobsPage() {
 
     if (authLoading || loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-600"></div>
+            <div className="min-h-screen bg-neutral-950 flex items-center justify-center">
+                <div className="flex flex-col items-center gap-4">
+                    <div className="w-12 h-12 rounded-full border-2 border-cyan-500 border-t-transparent animate-spin" />
+                    <p className="text-white/60">Loading...</p>
+                </div>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-neutral-950 text-white">
+            {/* Background Effects */}
+            <div className="fixed inset-0 z-0 pointer-events-none">
+                <div className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-3xl" />
+                <div className="absolute bottom-0 left-1/4 w-[400px] h-[400px] bg-purple-500/10 rounded-full blur-3xl" />
+            </div>
+
             {/* Header */}
-            <header className="bg-white border-b border-gray-200">
+            <header className="relative z-10 border-b border-white/10">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center justify-between h-16">
                         <Link
                             href="/recruiter"
-                            className="flex items-center text-gray-600 hover:text-gray-900"
+                            className="flex items-center text-white/60 hover:text-white transition-colors"
                         >
                             <ArrowLeft className="h-5 w-5 mr-2" />
-                            Back
+                            Back to Dashboard
                         </Link>
                         <button
                             onClick={() => setShowUpload(!showUpload)}
-                            className="flex items-center gap-2 bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors"
+                            className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-cyan-500 to-cyan-600 rounded-xl font-medium text-white hover:opacity-90 transition-opacity shadow-lg shadow-cyan-500/25"
                         >
                             <Plus className="h-5 w-5" />
                             Add Job
@@ -108,21 +117,30 @@ export default function RecruiterJobsPage() {
             </header>
 
             {/* Main Content */}
-            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <h1 className="text-3xl font-bold text-gray-900 mb-8">Job Postings</h1>
+            <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <h1 className="text-3xl font-bold text-white mb-2">Job Postings</h1>
+                <p className="text-white/50 mb-8">Manage your job listings and find the best candidates</p>
 
                 {error && (
-                    <div className="bg-red-50 text-red-600 p-4 rounded-lg mb-6">
+                    <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 mb-6">
                         {error}
                     </div>
                 )}
 
                 {/* Upload Section */}
                 {showUpload && (
-                    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
-                        <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                            Upload Job Description
-                        </h2>
+                    <div className="p-6 rounded-2xl bg-white/5 border border-white/10 mb-8 animate-fade-in">
+                        <div className="flex items-center gap-3 mb-6">
+                            <div className="w-12 h-12 rounded-xl bg-cyan-500/20 flex items-center justify-center">
+                                <Upload className="h-6 w-6 text-cyan-400" />
+                            </div>
+                            <div>
+                                <h2 className="text-xl font-semibold text-white">
+                                    Upload Job Description
+                                </h2>
+                                <p className="text-white/50 text-sm">PDF, DOCX, or TXT files supported</p>
+                            </div>
+                        </div>
                         <FileUpload
                             onUpload={handleFileUpload}
                             uploading={uploading}
@@ -133,72 +151,86 @@ export default function RecruiterJobsPage() {
 
                 {/* Jobs List */}
                 {jobs.length === 0 ? (
-                    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
-                        <Briefcase className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                        <h3 className="text-lg font-medium text-gray-900 mb-2">
+                    <div className="p-12 rounded-2xl bg-white/5 border border-white/10 text-center">
+                        <div className="w-16 h-16 rounded-2xl bg-cyan-500/20 flex items-center justify-center mx-auto mb-4">
+                            <Briefcase className="h-8 w-8 text-cyan-400" />
+                        </div>
+                        <h3 className="text-xl font-semibold text-white mb-2">
                             No jobs posted yet
                         </h3>
-                        <p className="text-gray-600 mb-4">
-                            Upload a job description to get started
+                        <p className="text-white/50 mb-6">
+                            Upload a job description to get started finding candidates
                         </p>
                         <button
                             onClick={() => setShowUpload(true)}
-                            className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors"
+                            className="px-6 py-3 bg-gradient-to-r from-cyan-500 to-cyan-600 rounded-xl font-medium text-white hover:opacity-90 transition-opacity shadow-lg shadow-cyan-500/25"
                         >
                             Add Your First Job
                         </button>
                     </div>
                 ) : (
-                    <div className="grid gap-6">
-                        {jobs.map((job) => (
+                    <div className="grid gap-4">
+                        {jobs.map((job, index) => (
                             <div
                                 key={job.id}
-                                className="bg-white rounded-xl shadow-sm border border-gray-100 p-6"
+                                className="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-white/20 transition-all animate-fade-in"
+                                style={{ animationDelay: `${index * 0.05}s` }}
                             >
                                 <div className="flex items-start justify-between">
                                     <div className="flex-1">
-                                        <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                                            {job.parsed_data?.title || "Untitled Position"}
-                                        </h3>
-                                        <p className="text-gray-600 mb-4">
-                                            {job.parsed_data?.company || user?.company} •{" "}
-                                            {job.parsed_data?.location || "Location not specified"}
-                                        </p>
-
-                                        {/* Skills */}
-                                        {job.parsed_data?.required_skills?.length > 0 && (
-                                            <div className="flex flex-wrap gap-2 mb-4">
-                                                {job.parsed_data.required_skills.slice(0, 5).map(
-                                                    (skill: string, index: number) => (
-                                                        <span
-                                                            key={index}
-                                                            className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm"
-                                                        >
-                                                            {skill}
-                                                        </span>
-                                                    )
-                                                )}
-                                                {job.parsed_data.required_skills.length > 5 && (
-                                                    <span className="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm">
-                                                        +{job.parsed_data.required_skills.length - 5} more
+                                        <div className="flex items-start gap-4">
+                                            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/20 to-purple-500/20 flex items-center justify-center flex-shrink-0">
+                                                <Briefcase className="h-6 w-6 text-cyan-400" />
+                                            </div>
+                                            <div className="flex-1">
+                                                <h3 className="text-xl font-semibold text-white mb-2">
+                                                    {job.parsed_data?.title || "Untitled Position"}
+                                                </h3>
+                                                <div className="flex flex-wrap items-center gap-4 text-white/50 text-sm mb-4">
+                                                    <span className="flex items-center gap-1">
+                                                        <MapPin className="h-4 w-4" />
+                                                        {job.parsed_data?.location || "Location not specified"}
                                                     </span>
+                                                    {job.parsed_data?.salary_range && (
+                                                        <span className="flex items-center gap-1">
+                                                            <DollarSign className="h-4 w-4" />
+                                                            {job.parsed_data.salary_range}
+                                                        </span>
+                                                    )}
+                                                    <span className="flex items-center gap-1">
+                                                        <Calendar className="h-4 w-4" />
+                                                        {new Date(job.created_at).toLocaleDateString()}
+                                                    </span>
+                                                </div>
+
+                                                {/* Skills */}
+                                                {job.parsed_data?.required_skills?.length > 0 && (
+                                                    <div className="flex flex-wrap gap-2">
+                                                        {job.parsed_data.required_skills.slice(0, 5).map(
+                                                            (skill: string, idx: number) => (
+                                                                <span
+                                                                    key={idx}
+                                                                    className="px-3 py-1 bg-cyan-500/10 text-cyan-400 rounded-lg text-sm border border-cyan-500/20"
+                                                                >
+                                                                    {skill}
+                                                                </span>
+                                                            )
+                                                        )}
+                                                        {job.parsed_data.required_skills.length > 5 && (
+                                                            <span className="px-3 py-1 bg-white/5 text-white/50 rounded-lg text-sm border border-white/10">
+                                                                +{job.parsed_data.required_skills.length - 5} more
+                                                            </span>
+                                                        )}
+                                                    </div>
                                                 )}
                                             </div>
-                                        )}
-
-                                        <div className="flex items-center gap-4 text-sm text-gray-500">
-                                            <span>
-                                                Posted: {new Date(job.created_at).toLocaleDateString()}
-                                            </span>
-                                            {job.parsed_data?.salary_range && (
-                                                <span>Salary: {job.parsed_data.salary_range}</span>
-                                            )}
                                         </div>
                                     </div>
 
                                     <button
                                         onClick={() => handleDeleteJob(job.id)}
-                                        className="text-gray-400 hover:text-red-500 transition-colors p-2"
+                                        className="p-2 rounded-lg text-white/40 hover:text-red-400 hover:bg-red-500/10 transition-all"
+                                        title="Delete job"
                                     >
                                         <Trash2 className="h-5 w-5" />
                                     </button>

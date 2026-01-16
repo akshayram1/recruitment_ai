@@ -1,14 +1,94 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 @import "@crayonai/react-ui/styles/index.css";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ===== DESIGN SYSTEM ===== */
 :root {
-    --foreground-rgb: 0, 0, 0;
-    --background-start-rgb: 250, 250, 250;
-    --background-end-rgb: 255, 255, 255;
+    /* Primary - Electric Violet */
+    --primary-50: 250 245 255;
+    --primary-100: 243 232 255;
+    --primary-200: 233 213 255;
+    --primary-300: 216 180 254;
+    --primary-400: 192 132 252;
+    --primary-500: 168 85 247;
+    --primary-600: 147 51 234;
+    --primary-700: 126 34 206;
+    --primary-800: 107 33 168;
+    --primary-900: 88 28 135;
+
+    /* Accent - Cyan */
+    --accent-50: 236 254 255;
+    --accent-100: 207 250 254;
+    --accent-200: 165 243 252;
+    --accent-300: 103 232 249;
+    --accent-400: 34 211 238;
+    --accent-500: 6 182 212;
+    --accent-600: 8 145 178;
+    --accent-700: 14 116 144;
+
+    /* Success - Emerald */
+    --success-500: 16 185 129;
+    --success-600: 5 150 105;
+
+    /* Warning - Amber */
+    --warning-500: 245 158 11;
+
+    /* Error - Rose */
+    --error-500: 244 63 94;
+
+    /* Neutral */
+    --neutral-50: 250 250 250;
+    --neutral-100: 245 245 245;
+    --neutral-200: 229 229 229;
+    --neutral-300: 212 212 212;
+    --neutral-400: 163 163 163;
+    --neutral-500: 115 115 115;
+    --neutral-600: 82 82 82;
+    --neutral-700: 64 64 64;
+    --neutral-800: 38 38 38;
+    --neutral-900: 23 23 23;
+
+    /* Backgrounds */
+    --bg-primary: 255 255 255;
+    --bg-secondary: 250 250 252;
+    --bg-tertiary: 245 245 250;
+
+    /* Glass effects */
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.3);
+    --glass-shadow: 0 8px 32px rgba(147, 51, 234, 0.1);
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, rgb(var(--primary-500)), rgb(var(--accent-500)));
+    --gradient-hero: linear-gradient(135deg, #1a0033 0%, #2d1b4e 25%, #1e3a5f 50%, #0f2942 75%, #0a1628 100%);
+    --gradient-card: linear-gradient(145deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.6));
+    --gradient-glow: radial-gradient(circle at 50% 0%, rgba(168, 85, 247, 0.15), transparent 50%);
+}
+
+/* ===== BASE STYLES ===== */
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Outfit', system-ui, sans-serif;
+    color: rgb(var(--neutral-800));
+    background: rgb(var(--bg-secondary));
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+code,
+pre,
+.font-mono {
+    font-family: 'JetBrains Mono', monospace;
 }
 
 /* Reset pointer-events for links */
@@ -19,45 +99,127 @@ button,
     cursor: pointer !important;
 }
 
-body {
-    font-family: 'Inter', sans-serif;
-    color: rgb(var(--foreground-rgb));
-    background: linear-gradient(to bottom,
-            transparent,
-            rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
-}
+/* ===== CUSTOM COMPONENTS ===== */
+@layer components {
 
-@layer utilities {
-    .text-balance {
-        text-wrap: balance;
+    /* Glass Card */
+    .glass-card {
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid var(--glass-border);
+        box-shadow: var(--glass-shadow);
+    }
+
+    /* Gradient Text */
+    .gradient-text {
+        background: var(--gradient-primary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    /* Glow Button */
+    .btn-glow {
+        background: var(--gradient-primary);
+        box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
+        transition: all 0.3s ease;
+    }
+
+    .btn-glow:hover {
+        box-shadow: 0 6px 25px rgba(168, 85, 247, 0.6);
+        transform: translateY(-2px);
+    }
+
+    /* Card Hover Effect */
+    .card-hover {
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .card-hover:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 25px 50px -12px rgba(147, 51, 234, 0.15);
+    }
+
+    /* Animated Border */
+    .animated-border {
+        position: relative;
+        background: white;
+        border-radius: 1rem;
+    }
+
+    .animated-border::before {
+        content: '';
+        position: absolute;
+        inset: -2px;
+        border-radius: 1.1rem;
+        background: var(--gradient-primary);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: -1;
+    }
+
+    .animated-border:hover::before {
+        opacity: 1;
+    }
+
+    /* Floating Animation */
+    .float {
+        animation: float 6s ease-in-out infinite;
+    }
+
+    /* Pulse Glow */
+    .pulse-glow {
+        animation: pulseGlow 2s ease-in-out infinite;
+    }
+
+    /* Shimmer Effect */
+    .shimmer {
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        background-size: 200% 100%;
+        animation: shimmer 2s infinite;
     }
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+/* ===== ANIMATIONS ===== */
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
 }
 
-::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 4px;
+@keyframes pulseGlow {
+
+    0%,
+    100% {
+        box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+    }
+
+    50% {
+        box-shadow: 0 0 40px rgba(168, 85, 247, 0.6);
+    }
 }
 
-::-webkit-scrollbar-thumb {
-    background: #c1c1c1;
-    border-radius: 4px;
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
 }
 
-::-webkit-scrollbar-thumb:hover {
-    background: #a1a1a1;
-}
-
-/* Chat message animations */
 @keyframes fadeIn {
     from {
         opacity: 0;
-        transform: translateY(10px);
+        transform: translateY(20px);
     }
 
     to {
@@ -66,11 +228,56 @@ body {
     }
 }
 
-.animate-fade-in {
-    animation: fadeIn 0.3s ease-out;
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-/* Loading dots animation */
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
 @keyframes bounce {
 
     0%,
@@ -84,6 +291,50 @@ body {
     }
 }
 
+/* Animation Classes */
+.animate-fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-scale-in {
+    animation: scaleIn 0.4s ease-out forwards;
+}
+
+.animate-slide-in-right {
+    animation: slideInRight 0.5s ease-out forwards;
+}
+
+.animate-gradient {
+    background-size: 200% 200%;
+    animation: gradient 8s ease infinite;
+}
+
+/* Staggered animations */
+.stagger-1 {
+    animation-delay: 0.1s;
+}
+
+.stagger-2 {
+    animation-delay: 0.2s;
+}
+
+.stagger-3 {
+    animation-delay: 0.3s;
+}
+
+.stagger-4 {
+    animation-delay: 0.4s;
+}
+
+.stagger-5 {
+    animation-delay: 0.5s;
+}
+
+/* Loading dots animation */
 .loading-dot {
     animation: bounce 1.4s infinite ease-in-out both;
 }
@@ -94,4 +345,65 @@ body {
 
 .loading-dot:nth-child(2) {
     animation-delay: -0.16s;
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgb(var(--neutral-100));
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, rgb(var(--primary-400)), rgb(var(--accent-400)));
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, rgb(var(--primary-500)), rgb(var(--accent-500)));
+}
+
+/* ===== SELECTION ===== */
+::selection {
+    background: rgba(168, 85, 247, 0.2);
+    color: rgb(var(--primary-700));
+}
+
+/* ===== FOCUS STYLES ===== */
+*:focus-visible {
+    outline: 2px solid rgb(var(--primary-500));
+    outline-offset: 2px;
+}
+
+/* ===== UTILITY CLASSES ===== */
+@layer utilities {
+    .text-balance {
+        text-wrap: balance;
+    }
+
+    .bg-mesh {
+        background-image:
+            radial-gradient(at 40% 20%, rgba(168, 85, 247, 0.1) 0px, transparent 50%),
+            radial-gradient(at 80% 0%, rgba(6, 182, 212, 0.1) 0px, transparent 50%),
+            radial-gradient(at 0% 50%, rgba(168, 85, 247, 0.05) 0px, transparent 50%),
+            radial-gradient(at 80% 50%, rgba(6, 182, 212, 0.05) 0px, transparent 50%),
+            radial-gradient(at 0% 100%, rgba(168, 85, 247, 0.1) 0px, transparent 50%),
+            radial-gradient(at 80% 100%, rgba(6, 182, 212, 0.1) 0px, transparent 50%);
+    }
+
+    .bg-dots {
+        background-image: radial-gradient(rgb(var(--neutral-300)) 1px, transparent 1px);
+        background-size: 20px 20px;
+    }
+
+    .bg-grid {
+        background-image:
+            linear-gradient(rgba(168, 85, 247, 0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(168, 85, 247, 0.05) 1px, transparent 1px);
+        background-size: 50px 50px;
+    }
 }

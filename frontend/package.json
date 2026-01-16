@@ -4,10 +4,12 @@
     "private": true,
     "scripts": {
         "dev": "next dev --turbo",
+        "dev:fast": "NODE_OPTIONS='--max-old-space-size=4096' NEXT_TELEMETRY_DISABLED=1 next dev --turbo",
         "dev:legacy": "next dev",
         "build": "next build",
         "start": "next start",
-        "lint": "next lint"
+        "lint": "next lint",
+        "clean": "rm -rf .next node_modules/.cache"
     },
     "dependencies": {
         "@crayonai/react-core": "^0.7.6",

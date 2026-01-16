@@ -1,49 +1,47 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    output: 'standalone',
     reactStrictMode: true,
-    transpilePackages: ['@thesysai/genui-sdk', '@crayonai/react-ui', '@crayonai/react-core'],
-
-    // Optimize build performance
+    poweredByHeader: false,
+    swcMinify: true,
+    
+    // Enable experimental features for faster builds
     experimental: {
+        // Optimize package imports
         optimizePackageImports: [
             '@thesysai/genui-sdk',
             '@crayonai/react-ui',
             '@crayonai/react-core',
             '@radix-ui/react-icons',
-            'lucide-react'
+            'lucide-react',
         ],
     },
-
-    // Webpack optimizations (only used in non-Turbopack mode)
+    
+    images: {
+        unoptimized: true,
+    },
+    
+    // Webpack optimizations
     webpack: (config, { dev, isServer }) => {
         // Enable filesystem caching for faster rebuilds
-        config.cache = {
-            type: 'filesystem',
-            buildDependencies: {
-                config: [__filename],
-            },
-        };
-
-        // Reduce source map generation in development
         if (dev) {
-            config.devtool = 'eval-cheap-module-source-map';
+            config.cache = {
+                type: 'filesystem',
+                buildDependencies: {
+                    config: [__filename],
+                },
+            };
+            
+            // Faster rebuilds in development
+            if (!isServer) {
+                config.optimization = {
+                    ...config.optimization,
+                    removeAvailableModules: false,
+                    removeEmptyChunks: false,
+                    splitChunks: false,
+                };
+            }
         }
-
         return config;
-    },
-
-    // Faster page loading
-    poweredByHeader: false,
-    compress: true,
-
-    async rewrites() {
-        return [
-            {
-                source: '/api/:path*',
-                destination: `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/:path*`,
-            },
-        ];
     },
 };
 

@@ -165,11 +165,13 @@ export const recruiterApi = {
         return response.data;
     },
 
-    searchCandidates: async (query: string, jobId?: string) => {
-        const response = await api.post("/recruiter/search/candidates", {
-            query,
-            job_id: jobId,
-        });
+    searchCandidates: async (query?: string, jobId?: string, limit: number = 10) => {
+        const params = new URLSearchParams();
+        if (query) params.append("query", query);
+        if (jobId) params.append("job_id", jobId);
+        params.append("limit", limit.toString());
+        
+        const response = await api.get(`/recruiter/candidates/search?${params.toString()}`);
         return response.data;
     },
 };
